@@ -1,0 +1,371 @@
+#Make a project for restaurant bills.
+
+#import required modules
+import random
+import math
+import tkinter
+import time
+import mysql.connector
+
+main=tkinter.Tk()
+main.title("Order Management System")
+main.configure(bg="white")
+main.geometry("900x400")
+
+tkinter.Label(main,text="").grid(row=0,column=0) 
+
+tkinter.Label(main,text="Welcome to the AMAN HOTEL MANAGEMENT SYSTEM",bg="white",font="Times").grid(row=0,column=2)
+tkinter.Label(main,text="This system manages the hotel's data and takes the orders. ",bg="white",font="Times").grid(row=2,column=2)
+tkinter.Label(main,text="What do you want to do today? ",bg="white",font="Times").grid(row=4,column=2)
+tkinter.Label(main,text="CLICK HERE TO PLACE NEW ORDER ----> ",bg="white",font="Times").grid(row=6,column=1)
+tkinter.Label(main,text="CLICK HERE TO SEE MANAGEMENT  ----> ",bg="white",font="Times").grid(row=8,column=1)
+tkinter.Label(main,text="CLICK HERE TO SEE ORDER STATUS----> ",bg="white",font="Times").grid(row=10,column=1)
+t=tkinter.Label(main,text="",bg="white",font=("Times",'18','bold'))
+t.grid(row=1,column=2)
+
+
+def timetake():
+         x=time.strftime("%H:%M:%S %p")
+         sk="Currently the time is:"+x
+         t.configure(text=x)
+         main.after(1000,timetake)
+
+timetake()
+
+
+lstsum=[]
+lstitem=[]
+lstquantity=[]
+
+
+def OrderCodes():
+         c=tkinter.Tk()
+         c.configure(bg="orange")
+         c.geometry("650x500")
+         c.title("GENERAL INSTRUCTIONS")
+         tkinter.Label(c,text="Namaste! Please refer to below instructions to give order",font="Times",bg="orange").grid(row=0,column=1)
+         tkinter.Label(c,text="1) Enter your NAME and MOBILE NUMBER in the boxes provided. Entries should be valid!",font="Times",bg="orange").grid(row=1,column=1)
+         tkinter.Label(c,text="2) A MENU is displayed in the MAIN WINDOW giving items list and their codes.",font="Times",bg="orange").grid(row=2,column=1)
+         tkinter.Label(c,text="3) To add items to your order, write down its code in the ORDER CODE AREA.",font="Times",bg="orange").grid(row=3,column=1)
+         tkinter.Label(c,text="4) Now below it, write the quantity of ORDER.",font="Times",bg="orange").grid(row=4,column=1)
+         tkinter.Label(c,text="5) Once you have entered this, please click on ADD TO BILL Button.",font="Times",bg="orange").grid(row=5,column=1)
+         tkinter.Label(c,text="6) The entries will be cleared immediately, showing it is added to bill.",font="Times",bg="orange").grid(row=6,column=1)
+         tkinter.Label(c,text="7) Fill more fresh entries,if you want to.",font="Times",bg="orange").grid(row=7,column=1)
+         tkinter.Label(c,text="8) Please click on PLACE MY ORDER Button if you have done adding.",font="Times",bg="orange").grid(row=8,column=1)
+         tkinter.Label(c,text="9) A page will open after submitting your order, showing your BILL DETAILS.",font="Times",bg="orange").grid(row=10,column=1)
+         tkinter.Label(c,text="  ",font="Times",bg="orange").grid(row=11,column=1)
+         tkinter.Label(c,text="THANK YOU!!!",font="Times",bg="orange").grid(row=13,column=1)
+         tkinter.Button(c,text="CANCEL",activebackground="red",bg="red",font="Times",command=c.destroy).grid(row=14,column=1)
+
+
+         
+def Customer():
+         root=tkinter.Tk()
+         root.configure(bg="white")
+         root.geometry("1200x900")
+         root.title("Customer Service") 
+         tkinter.Label(root,text=" ").grid(row=0,column=0)
+         tkinter.Label(root,text="Place Your Order Here! ",bg="white",font="Times").grid(row=1,column=1)
+         tkinter.Label(root,text="Please make sure all the entries are genuine! ",bg="white",font="Times").grid(row=2,column=1)
+         tkinter.Label(root,text="Enter Your Name Here       -->",bg="white",font="Times").grid(row=4,column=0)
+         a=tkinter.Entry(root)
+         a.grid(row=4,column=1)
+         tkinter.Label(root,text="Enter Your Mobile No. Here -->",bg="white",font="Times").grid(row=6,column=0)
+         b=tkinter.Entry(root)
+         b.grid(row=6,column=1)
+         tkinter.Label(root,text="Enter the Code of Order -->",bg="white",font="Times").grid(row=8,column=0)
+         c1=tkinter.Entry(root)
+         c1.grid(row=8,column=1)
+         errorlabel=tkinter.Label(root,text="  ",bg="white",font="Times",fg="red")
+         errorlabel.grid(row=16,column=1)
+         d1=tkinter.Entry(root)
+         d1.grid(row=9,column=1)
+         tkinter.Label(root,text="Have a look at the MENU Below to place order:",bg="white",font="Times").grid(row=17,column=1)
+         tkinter.Label(root,text="Write the quantity of Item -->",bg="white",font="Times").grid(row=9,column=0)
+         mykcb=mysql.connector.connect(host="localhost",user="root",passwd="aman1983",database="py")
+         myt=mykcb.cursor()
+         myt.execute("select * from ordercodes;")
+         mtttt=myt.fetchall()
+         x=20
+         for i in mtttt:
+                  
+                  txm2="Name Of Order --->"+str(i[0])+"      Order Code---->"+str(i[1])+"      Price: Rs "+str(i[2])
+                  tkinter.Label(root,text=txm2,font="Times",bg="white",fg="black").grid(row=x,column=1)
+                  x=x+1
+         mykcb.close()
+         m=0
+
+         
+                  
+         
+
+         def ProOrder():
+                  try:
+
+                           
+                           m1=str(a.get())
+                           m2=str(b.get())
+                           m2=int(m2)
+                           k=int(c1.get())
+                           k2=int(d1.get())
+                           n=str(k)
+                           errorlabel.configure(text=" ")
+                                             
+                           if(n=='1'):
+                                                            s=k2*70
+                                                            lstsum.append(s)
+                                                            lstitem.append("Chicken Tikka")
+                                                            lstquantity.append(k2)
+                                                            
+                                                            
+                           if(n=='2'):
+                                                            s=k2*90
+                                                            lstsum.append(s)
+                                                            lstitem.append("Chicken Tandoori")
+                                                            lstquantity.append(k2)
+                           if(n=='3'):
+                                                            s=k2*90
+                                                            lstsum.append(s)
+                                                            lstitem.append("Chicken Seekh Kebab")
+                                                            lstquantity.append(k2)
+                           if(n=='4'):
+                                                            s=k2*120
+                                                            lstsum.append(s)
+                                                            lstitem.append("Chicken Kadai")
+                                                            lstquantity.append(k2)
+                                                            
+                           if(n=='5'):
+                                                            s=k2*120
+                                                            lstsum.append(s)
+                                                            lstitem.append("Chicken Popcorn")
+                                                            lstquantity.append(k2)
+                           if(n=='6'):
+                                                            s=k2*140
+                                                            lstsum.append(s)
+                                                            lstitem.append("Chicken Burger Large")
+                                                            lstquantity.append(k2)
+                           if(n=='7'):
+                                                            s=k2*50
+                                                            lstsum.append(s)
+                                                            lstitem.append("Chicken Burger Small")
+                                                            lstquantity.append(k2)
+                           if(n=='8'):
+                                                            s=k2*200
+                                                            lstsum.append(s)
+                                                            lstitem.append("Paneer Pakora")
+                                                            lstquantity.append(k2)
+                           if(n=='12'):
+                                                            s=k2*65
+                                                            lstsum.append(s)
+                                                            lstitem.append("Chicken Popcorn Small")
+                                                            lstquantity.append(k2)
+                           c1.delete(0,'end')
+                           d1.delete(0,'end')
+                           tkinter.Label(root,text="YOUR ORDER SUMMARY:- ",bg="white",font=("Times",'18','bold')).grid(row=2,column=2)
+                           t67=3
+                           for i in range(0,len(lstitem)):
+                                    t56="Item Name:"+str(lstitem[i])+"    Quantity of Item:"+str(lstquantity[i])
+                                    tkinter.Label(root,text=t56,bg="white",font="Times").grid(row=t67,column=2)
+                                    t67=t67+1
+                           
+                           
+
+                              
+                             
+                           
+                  except ValueError:
+                           errorlabel.configure(text="Incorrect Input! Please make genuine input!")
+                  
+                  
+         def PlacOrder():
+                  x32=time.strftime('You placed your order on %d %B %Y %A  %H:%M:%S %p')
+                  errorlabel.configure(text="Please wait... Your Order is being processed")
+                  def Billing():
+                           nonlocal x
+                           m1=str(a.get())
+                           m2=str(b.get())
+                           root.destroy()
+                           root1=tkinter.Tk()
+                           root1.configure(bg="yellow")
+                           root1.geometry("900x600")
+                           root1.title("Customer Service")
+                           tkinter.Label(root1,text="Your Order has been placed successfully!",bg="yellow",fg="blue",font="Times").grid(row=1,column=1)
+                           tkinter.Label(root1,text="Your Bill is as follows:",bg="yellow",fg="blue",font="Times").grid(row=2,column=1)
+                           xe=4
+                           ordt=random.randint(100,10000)
+                           y=sum(lstsum)
+                           for i in range(0,len(lstitem)):
+                                    
+                                    skl=str(lstitem[i])+"   Quantity:"+str(lstquantity[i])+"  Total Amount:"+str(lstsum[i])
+                                    tkinter.Label(root1,text=skl,bg="yellow",fg="blue",font="Times").grid(row=xe,column=1)
+                                    xe=xe+1
+                           orders="YOUR ORDER ID:"+str(ordt)
+                           pay="Your Total Amount Is:"+str(y)
+                           tkinter.Label(root1,text=pay,font=("Times","20"),bg="yellow",fg="red").grid(row=xe+3,column=1)
+                           tkinter.Label(root1,text=orders,font=("Times","20"),bg="yellow",fg="red").grid(row=xe+4,column=1)
+                           tkinter.Label(root1,text="Note: PLEASE RETAIN THE ORDER ID TO CHECK YOUR ORDER STATUS",font=("Times","16"),bg="yellow",fg="red").grid(row=xe+5,column=1)
+                           tkinter.Label(root1,text="Your order is currently Pending. Please pay at cash counter!",bg="yellow",fg="red").grid(row=xe+7,column=1)
+                           tkinter.Label(root1,text=x32,bg="yellow",fg="red",font=('Times','20','bold')).grid(row=xe+8,column=1)
+                           mykcb1=mysql.connector.connect(host="localhost",user="root",passwd="aman1983",database="py")
+                           myt1=mykcb1.cursor()
+                           simp="insert into jack(orderid,name,mobile,bill) values("+str(ordt)+",'"+str(m1)+"',"+str(m2)+","+str(y)+");"
+                           myt1.execute(simp)
+                           mykcb1.commit()
+                           mykcb1.close()
+                           tkinter.Button(root1,text="CLOSE THIS WINDOW",bg="red",fg="black",activebackground="blue",command=root1.destroy).grid(row=xe+11,column=1)
+                  root.after(5000,Billing)
+
+                  
+                  
+                           
+                           
+                             
+         tkinter.Button(root,text="ADD TO THE BILL ",bg="green",activebackground="green",font="Times",command=ProOrder).grid(row=13,column=1)
+         tkinter.Button(root,text="PLACE MY ORDER",bg="red",activebackground="red",font="Times",command=PlacOrder).grid(row=14,column=1)
+         tkinter.Button(root,text="HOW TO PLACE ORDER?",bg="blue",activebackground="green",font="Times",command=OrderCodes).grid(row=12,column=1)
+
+def Manager():
+         man=tkinter.Tk()
+         man.title("Manager Portal")
+         man.geometry("700x600")
+         man.configure(bg="white")
+         tkinter.Label(man,text="Welcome to the Stay Safe Hotel management system!",font="Times",bg="white").grid(row=2,column=1)
+         tkinter.Label(man,text="Before you proceed, please login to the portal:",font="Times",bg="white").grid(row=3,column=1)
+         tkinter.Label(man,text="Enter the 5 digit Access ID:",font="Times",bg="white").grid(row=5,column=0)
+         m1=tkinter.Entry(man,fg="red")
+         m1.grid(row=5,column=1)
+         tkinter.Label(man,text="Enter the 4 digit SECURITY PIN:",font="Times",bg="white").grid(row=7,column=0)
+         m2=tkinter.Entry(man,fg="red")
+         m2.grid(row=7,column=1)
+         m3=tkinter.Label(man,text="        ",font="Times",bg="white")
+         m3.grid(row=9,column=1)
+         def Managerswindow():
+                  
+                  man.destroy()
+                  manag=tkinter.Tk()
+                  manag.title("Main Window")
+                  manag.configure(bg="white")
+                  manag.geometry("400x400")
+                  tkinter.Label(manag,text="Welcome To The Manager Window",font="Times",bg="white",fg="black").grid(row=1,column=2)
+                  tkinter.Label(manag,text="You can here manage the orders of restuarant!",font="Times",bg="white",fg="black").grid(row=3,column=2)
+                  lstorders=[]
+                  c=tkinter.Label(manag,text="     ",font="Times",bg="white",fg="brown")
+                  c.grid(row=5,column=2)
+                  count1=0
+                  
+                  
+                  def TotalEarnings():
+                           nonlocal count1
+                           count1=count1+1
+                           if(count1%2==1):
+                                    
+                                    
+                                    mydb=mysql.connector.connect(host="localhost",user="root",passwd="aman1983",database="py")
+                                    mycursor=mydb.cursor()
+                           
+                                    mycursor.execute("select sum(bill) from jack;")
+                                    x=mycursor.fetchall()[0][0]
+                                    y="The total earning so far is INR "+str(x)
+                                    c.configure(text=y)
+                                    button143.configure(text="Hide Earning")
+                                    
+                           if(count1%2==0):
+                                    c.configure(text=" ")
+                                    button143.configure(text="Show Total Earning")
+                  def ShowRecords():
+                           mydb=mysql.connector.connect(host="localhost",user="root",passwd="aman1983",database="py")
+                           mycursor=mydb.cursor()
+                           mycursor.execute("select * from jack;")
+                           m=mycursor.fetchall()
+                           x=8
+                           for i in m:
+                                    txm="Order ID:"+str(i[0])+"      Bill:"+str(i[3])+"      Status:"+str(i[4])
+                                    tkinter.Label(manag,text=txm,font="Times",bg="white",fg="black").grid(row=x,column=2)
+                                    x=x+1
+                           mydb.close()
+                  def addorder():
+                           myms=mysql.connector.connect(host="localhost",user="root",passwd="aman1983",database="py")
+                           mycurso=myms.cursor()
+                           try:
+                                    n1=str(input("Enter ordername:"))
+                                    n2=int(input("Enter id"))
+                                    n3=int(input("Price?"))
+                                    skr="insert into ordercodes values('"+n1+"',"+str(n2)+","+str(n3)+");"
+                                    mycurso.execute(skr)
+                                    myms.commit()
+                                    myms.close()
+                           except ValueError:
+                                    print("Retry again!")
+                           
+                           
+                  
+                                    
+                           
+                           
+                           
+                  button143=tkinter.Button(manag,text="Show Total Earning",font="Times",bg="white",fg="brown",command=TotalEarnings,width="15")
+                  button143.grid(row=4,column=2)
+                  button144=tkinter.Button(manag,text="SHOW ALL RECORDS",font="Times",bg="white",fg="brown",command=addorder)
+                  button144.grid(row=7,column=2)        
+         txe=3
+         def Flavory():
+                  nonlocal txe
+                  
+                  x=str(m1.get())
+                  y=str(m2.get())
+                  if(x=="15886" and y=="3254"):
+                           m3.configure(text="Access Granted!!! Please wait...")
+                           button19.grid_forget()
+                           man.after(3000,Managerswindow)
+                           
+                                    
+                           
+                  else:
+                           st1="Access Denied! Please TRY AGAIN! You have "+str(txe)+" attempts left!"
+                           m3.configure(text=st1)
+                           txe=txe-1
+                           if(txe==-1):
+                                    
+                                    m3.configure(text="You have failed all the attempts. This window will be deleted shortly...")
+                                    button19.grid_forget()
+                                    man.after(3000,man.destroy)
+                                    
+         button19=tkinter.Button(man,text="Submit",font="Times",bg="green",activebackground="yellow",command=Flavory)
+         button19.grid(row=12,column=1)
+def ShowSat():
+         xe=tkinter.Tk()
+         xe.title("ORDER STATUS ENQUIRY")
+         xe.geometry("600x600")
+         xe.configure(bg="white")
+         tkinter.Label(xe,text="    ",font=("Times",'16','bold'),bg="white").grid(row=0,column=1)
+         tkinter.Label(xe,text="Welcome to the ORDER ENQUIRY SYSTEM!",font=("Times",'12','bold'),bg="white").grid(row=1,column=1)
+         tkinter.Label(xe,text="To find your order,please tell us your ORDER ID:",font=("Times",'10','bold'),bg="white").grid(row=2,column=0)
+         x70=tkinter.Entry(xe)
+         x70.grid(row=2,column=1)
+         tkinter.Label(xe,text="Your ORDER ID is printed on the bill provided to you!",font=("Times",'10','bold'),bg="white").grid(row=4,column=1)
+         x45=tkinter.Label(xe,text="    ",font=("Times",'16','bold'),bg="white")
+         x45.grid(row=6,column=1)
+         def Taxingorder():
+                  try:
+                           s=int(x70.get())
+                           s=str(s)
+                           myk1=mysql.connector.connect(user="root",passwd="aman1983",host="localhost",database="py")
+                           my3=myk1.cursor()
+                           sm3="select status from jack where orderid="+str(s)+";"
+                           c=my3.execute(sm3)
+                           r="YOUR ORDER STATUS IS CURRENTLY "+str(c)
+                           x45.configure(text=r)
+                           tkinter.Button(xe,text="EXIT THIS WINDOW",font="Times",bg="red",activebackground="red",command=xe.destroy).grid(row=7,column=1)
+                  except ValueError:
+                           x45.configure(text="Please try again")
+         tkinter.Button(xe,text="Show Status",font="Times",bg="green",activebackground="green",command=Taxingorder).grid(row=3,column=1)
+
+                           
+         
+         
+         
+         
+tkinter.Button(main,text="Place New Order",width="25",bg="green",activebackground="green",font="Times",command=Customer).grid(row=6,column=2)
+tkinter.Button(main,text="Login To Management System",width="25",bg="yellow",activebackground="yellow",font="Times",command=Manager).grid(row=8,column=2)
+tkinter.Button(main,text="Check Order Status",width="25",bg="blue",activebackground="blue",font="Times",command=ShowSat).grid(row=10,column=2)
+tkinter.mainloop()
