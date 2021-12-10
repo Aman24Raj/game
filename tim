@@ -1,0 +1,84 @@
+/* Directories including slot */
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <time.h>
+/*List declaration for pointer words */
+#define Len 4
+/* This function will generate random word from list */
+
+char* generate(void);
+char* generate(void)
+{
+    char *list[]={"ambition","bat","ball","cricket"};
+    int num;
+    char *pim;
+    num=rand()%Len;
+    pim=list[num];
+    return pim;
+}
+bool play_game(void);
+
+int main(void)
+{
+    int x;
+    play_game();
+    printf("LOL\n");
+    return 0;
+}
+
+bool play_game(void)
+{
+    srand((unsigned) time(NULL));
+    char* target;
+    target=generate();
+    int len=strlen(target);
+    char gin[len+1];
+    char *guess;
+    guess=gin;
+    /* Fix set up for the game by assuming fixed area for guess func */
+    for(int i=0;i<len;i++)
+    {
+        printf("- ");
+        guess[i]='-';
+    }
+    printf("\n");
+    int turns=5,points=len,f=0;
+    bool finder;
+    char input;
+    for(;turns>0;)
+    {
+        finder=true;
+        printf("Enter your guess: ");
+        scanf("%c",&input);
+        for(int j=0;j<len;j++)
+        {
+            if(target[j]==input)
+            {
+                guess[j]=input;
+                finder=false;
+            }
+        }
+        printf("\n");
+        for(int pr=0;pr<len;pr++) printf("%c ",guess[pr]);
+        printf("\n");
+        if(strcmp(guess,target)==0) 
+        {
+            printf("You won this game!!!\n");
+            return true;
+        }
+        if(finder) turns=turns-1;
+        printf("The number of turns left is %d\n",turns);
+    }
+    if(strcmp(guess,target)==0)
+    {
+        printf("You won this game!!!\n");
+        return true;
+    }
+    else
+    {
+        printf("You lost this game!!!\n");
+        return false;
+    }
+}
