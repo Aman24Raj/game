@@ -1,0 +1,96 @@
+/* Directories including slot */
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <time.h>
+#include <ctype.h>
+/*List declaration for pointer words */
+#define Len 4
+/* This function will generate random word from list */
+int wins=0,loss=0;
+char* generate(void);
+char* generate(void)
+{
+    char *list[]={"ambition","bat","ball","cricket"};
+    int num;
+    char *pim;
+    num=rand()%Len;
+    pim=list[num];
+    return pim;
+}
+int play_game(void);
+
+int main(void)
+{
+    char mood;
+    srand((unsigned) time(NULL));
+    do {
+        play_game();
+        printf("\nPlay Again? (Y for yes, N for no): ");
+        do{mood=getchar();} while(getchar() != '\n');
+        printf("\n");
+    }  while(mood=='y' || mood=='Y');
+
+    printf("\nTotal number of wins: %d\nTotal number of loss: %d\nHave a Good Day!",wins,loss);
+    return 0;
+}
+
+int play_game(void)
+{
+    char* target;
+    target=generate();
+    int len=strlen(target);
+    char gin[len+1];
+    char *guess;
+    guess=gin;
+    /* Fix set up for the game by assuming fixed area for guess func */
+    for(int i=0;i<len;i++)
+    {
+        printf("- ");
+        guess[i]='-';
+    }
+    printf("\n");
+    int turns=5,points=len,f=0;
+    bool finder;
+    char input;
+    char ping;
+    for(;turns>0;)
+    {
+        finder=true;
+        printf("Enter your guess: ");
+        do{input=getchar();} while(getchar()!='\n');
+        for(int j=0;j<len;j++)
+        {
+            if(target[j]==input)
+            {
+                guess[j]=input;
+                finder=false;
+            }
+        }
+        printf("\n");
+        for(int pr=0;pr<len;pr++) printf("%c ",guess[pr]);
+        printf("\n");
+        ping=guess[0];
+        if(strcmp(guess,target)==0) 
+        {
+            printf("You won this game!!!\n");
+            wins++;
+            return 0;
+        }
+        if(finder) turns=turns-1;
+        printf("The number of turns left is %d\n",turns);
+    }
+    if(strcmp(guess,target)==0)
+    {
+        printf("You won this game!!!\n");
+        wins++;
+        return 0;
+    }
+    else
+    {
+        printf("You lost this game!!!\n");
+        loss++;
+        return 0;
+    }
+}
